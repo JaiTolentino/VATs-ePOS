@@ -129,15 +129,6 @@ class _FinancialReportViewState extends State<FinancialReportView> {
     final currentYear = selectedYear;
     final currentMonth = selectedMonth;
 
-    // Check if the selected year is in the future
-    if (currentYear! > DateTime.now().year) {
-      // Set to 0.0 if it's a future year (no data should be available)
-      setState(() {
-        monthlyTotal = 0.0;
-      });
-      return;
-    }
-
     double tempTotal = 0.0;
 
     QuerySnapshot querySnapshot =

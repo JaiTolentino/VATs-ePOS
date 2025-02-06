@@ -156,6 +156,18 @@ class FirestoreBloc extends Bloc<FirestoreEvent, FirestoreState> {
         }
       },
     );
+    on<GetReceipt>(
+      (event, emit) async {
+        emit(FirestoreLoading());
+        try {
+          ReceiptModel receipt = await firestoreService.getReceipt(event.code);
+          emit(FirestoreReceiptLoaded(receipt));
+        } catch (e) {
+          print(e);
+          emit(FirestoreError('Failed to load receipt: $e'));
+        }
+      },
+    );
     on<UpdateProduct>(
       (event, emit) {
         emit(FirestoreLoading());

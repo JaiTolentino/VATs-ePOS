@@ -12,11 +12,27 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       double vat = 0.0;
       double total = 0;
       double change = 0;
+      bool found = false;
       emit(ProductLoading());
       try {
-        list.add(event.product);
+        if (list.length == 0) {
+          list.add(event.product);
+        } else {
+          for (final item in list) {
+            if (item.productCode == event.product.productCode) {
+              item.quantity++;
+              found = true;
+              break; // Stop looping after finding the product
+            }
+          }
+          if (!found) {
+            list.add(event.product);
+          }
+        }
         list.forEach((data) {
-          subTotal = subTotal + data.price;
+          subTotal = subTotal + (data.price * data.quantity);
+          print('subtotal1: $subTotal');
+          print('quantity: ${data.quantity}');
         });
         subTotal += event.serviceCharge;
         vat = subTotal * 0.12;
@@ -25,6 +41,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         print('CHANGEEEEE $change');
         emit(ProductUpdated(list, subTotal, total, vat));
       } catch (e) {
+        print('UpdateTemporaryList error : $e');
         emit(ProductError('Error updating list'));
       }
     });
@@ -36,13 +53,15 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         emit(ProductLoading());
         try {
           list.forEach((data) {
-            subTotal = subTotal + data.price;
+            subTotal = subTotal + (data.price * data.quantity);
+            print('subtotal: $subTotal');
           });
           subTotal += event.serviceCharge;
           vat = subTotal * 0.12;
           total = subTotal + vat;
           emit(ProductUpdated(list, subTotal, total, vat));
         } catch (e) {
+          print(e);
           emit(ProductError('Failed to fetch data'));
         }
       },
@@ -64,6 +83,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
           change = event.cash - total;
           emit(ProductChange(list, subTotal, change, total, vat));
         } catch (e) {
+          print(e);
           emit(ProductError('Failed to fetch data'));
         }
       },
@@ -74,6 +94,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         try {
           emit(ProductLoaded(list));
         } catch (e) {
+          print(e);
           emit(ProductError('Failed to fetch data'));
         }
       },
@@ -85,14 +106,21 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         double total = 0;
         emit(ProductLoading());
         try {
-          list.remove(event.product);
+          if (event.product.quantity > 1) {
+            event.product.quantity--;
+          } else {
+            list.remove(event.product);
+          }
           list.forEach((data) {
-            subTotal = subTotal + data.price;
+            subTotal = subTotal + (data.price * data.quantity);
+            print('subtotal delete: $subTotal');
+            print('quantity delete: ${data.quantity}');
             vat = subTotal * 0.12;
             total = subTotal + vat + event.serviceCharge;
           });
           emit(ProductUpdated(list, subTotal, total, vat));
         } catch (e) {
+          print(e);
           emit(ProductError('Error removing item'));
         }
       },

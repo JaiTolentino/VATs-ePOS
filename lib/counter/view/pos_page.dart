@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -990,6 +992,7 @@ class _PosViewState extends State<PosView> {
                     ),
                   );
                 } else if (state is ProductUpdated) {
+                  print('updated Subtotal: ${state.subTotal}');
                   subtotal = state.subTotal;
                   total = state.total;
                   vat = state.vat;
@@ -1267,7 +1270,7 @@ class _PosViewState extends State<PosView> {
                                   List<ProductModel> prods = state.products;
                                   if (state.products.length > 0 &&
                                       cashController.text.isNotEmpty &&
-                                      cash > total) {
+                                      cash >= total) {
                                     BlocProvider.of<FirestoreBloc>(context).add(
                                       AddReceipt(
                                         ReceiptModel(
@@ -1604,7 +1607,7 @@ class _PosViewState extends State<PosView> {
                                   List<ProductModel> prods = state.products;
                                   if (state.products.length > 0 &&
                                       cashController.text.isNotEmpty &&
-                                      cash > total) {
+                                      cash >= total) {
                                     BlocProvider.of<FirestoreBloc>(context).add(
                                       AddReceipt(
                                         ReceiptModel(
@@ -1654,6 +1657,7 @@ class _PosViewState extends State<PosView> {
                     ),
                   );
                 } else {
+                  print(state);
                   return Container();
                 }
               },

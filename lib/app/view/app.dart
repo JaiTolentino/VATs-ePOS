@@ -11,6 +11,7 @@ import 'package:posadmin/counter/view/inventory_page.dart';
 import 'package:posadmin/counter/view/login_page.dart';
 import 'package:posadmin/counter/view/pos_page.dart';
 import 'package:posadmin/counter/view/qr_scanner.dart';
+import 'package:posadmin/counter/view/view_receipt_page.dart';
 import 'package:posadmin/l10n/l10n.dart';
 
 final GoRouter _router = GoRouter(
@@ -82,6 +83,14 @@ final GoRouter _router = GoRouter(
           path: 'edit/:code',
           builder: (BuildContext context, GoRouterState state) {
             return EditProductPage(
+              code: int.parse(state.pathParameters['code']!),
+            );
+          },
+        ),
+        GoRoute(
+          path: '/viewreceipt/:code',
+          builder: (context, state) {
+            return ViewReceiptPage(
               code: int.parse(state.pathParameters['code']!),
             );
           },

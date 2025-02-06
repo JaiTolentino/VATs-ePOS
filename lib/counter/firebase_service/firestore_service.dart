@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -126,21 +127,73 @@ class FirestoreService {
       'paymentMethod': receipt.paymentMethod,
       'receiptCategory': receipt.receiptCategory,
     });
-    print(receipt.products.length);
+
+    final receiptProductRef =
+        receiptsData.doc(referenceNumber.toString()).collection('products');
     for (final ProductModel element in receipt.products) {
-      receiptsData
-          .doc(referenceNumber.toString())
-          .collection('products')
-          .doc(element.productCode.toString())
-          .set({
-        'code': element.productCode,
-        'name': element.name,
-        'price': element.price,
-        'quantity': element.quantity,
-      });
+      final docRef = receiptProductRef.doc(element.productCode.toString());
+      final docSnapshot = await docRef.get();
+      if (docSnapshot.exists) {
+        // If exists, update quantity
+        final existingData = docSnapshot.data() as Map<String, dynamic>;
+        final updatedQuantity = existingData['quantity'] + element.quantity;
+
+        await docRef.update({'quantity': updatedQuantity});
+      } else {
+        // If not exists, create new entry
+        await docRef.set({
+          'code': element.productCode,
+          'name': element.name,
+          'price': element.price,
+          'quantity': element.quantity,
+        });
+      }
     }
 
     return receiptRef;
+  }
+
+  Future<List<ProductModel>> getReceiptProduct(int code) async {
+    return receiptsData.doc(code.toString()).collection('products').get().then(
+      (snapshot) {
+        return snapshot.docs.map((doc) {
+          Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+          return ProductModel(
+            int.parse(data['code'].toString()),
+            data['name'].toString(),
+            '',
+            int.parse(data['price'].toString()),
+            int.parse(data['quantity'].toString()),
+            '',
+          );
+        }).toList();
+      },
+    );
+  }
+
+  Future<ReceiptModel> getReceipt(int code) async {
+    final data = receiptsData.doc(code.toString());
+    final product = await data.get().then((doc) async {
+      final data = doc.data() as Map<String, dynamic>;
+      return ReceiptModel(
+        data['customerName'].toString(),
+        data['address'].toString(),
+        int.parse(data['referenceNumber'].toString()),
+        double.parse(data['serviceCharge'].toString()),
+        double.parse(data['amount'].toString()),
+        double.parse(data['vat'].toString()),
+        double.parse(data['total'].toString()),
+        double.parse(data['cash'].toString()),
+        double.parse(data['change'].toString()),
+        data['POSoperator'].toString(),
+        data['dateTimeCreated'].toString(),
+        data['userEmail'].toString(),
+        data['paymentMethod'].toString(),
+        data['receiptCategory'].toString(),
+        await getReceiptProduct(code),
+      );
+    });
+    return product;
   }
 
   Future<void> addProduct(ProductModel product) {

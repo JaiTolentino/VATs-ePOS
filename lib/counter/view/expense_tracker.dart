@@ -49,9 +49,10 @@ class _InventoryViewState extends State<InventoryView> {
   Future<void> thisMonthandlastMonth() async {
     int? selectedYear = DateTime.now().year;
     int selectedMonth = DateTime.now().month;
-    final currentYear = selectedYear;
-    final currentMonth = selectedMonth;
-    final lastMonth = selectedMonth - 1;
+    var currentYear = selectedYear;
+    var currentMonth = selectedMonth;
+    var lastMonth = selectedMonth - 1;
+
     QuerySnapshot querySnapshot =
         await FirebaseFirestore.instance.collection('expensestracker').get();
 
@@ -70,6 +71,11 @@ class _InventoryViewState extends State<InventoryView> {
           tempTotal += total;
         }
       }
+    }
+
+    if (selectedMonth == 1) {
+      currentYear = DateTime.now().year - 1;
+      lastMonth = 12;
     }
 
     for (var doc in querySnapshot.docs) {
@@ -224,508 +230,469 @@ class _InventoryViewState extends State<InventoryView> {
               ],
               controller: sideMenuController,
             ),
-            BlocBuilder<FirestoreBloc, FirestoreState>(
-              builder: (context, state) {
-                if (state is FirestoreLoading) {
-                  CircularProgressIndicator();
-                }
-                if (state is FirestoreProductLoaded) {
-                  List<ProductModel> products;
-
-                  products = state.product;
-
-                  return Container(
-                    width: MediaQuery.of(context).size.width - 70,
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Container(
-                        child: ListView(
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Expense Tracker",
-                                  style: TextStyle(
-                                    fontSize: 30,
-                                  ),
-                                ),
-                                Container(
-                                  width: 300,
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: TextField(
-                                    controller: _searchController,
-                                    decoration: InputDecoration(
-                                      labelText: 'Search expenses name',
-                                      prefixIcon: Icon(Icons.search),
-                                      border: OutlineInputBorder(),
-                                    ),
-                                  ),
-                                ),
-                                // Row(
-                                //   children: [
-                                //     Container(
-                                //       width: 450,
-                                //       height: 50,
-                                //       child: TextField(
-                                //         controller: searchController,
-                                //         onChanged: (value) {
-                                //           setState(() {
-                                //             query =
-                                //                 value; // Update the search query on text change
-                                //           });
-                                //         },
-                                //         decoration: InputDecoration(
-                                //           contentPadding: EdgeInsets.all(15),
-                                //           prefixIcon: Icon(Icons.search),
-                                //           prefixIconColor:
-                                //               Color.fromRGBO(171, 187, 194, 1),
-                                //           fillColor:
-                                //               Color.fromRGBO(57, 60, 73, 1),
-                                //           filled: true,
-                                //           hintStyle: TextStyle(
-                                //               color: Color.fromRGBO(
-                                //                   171, 187, 194, 1)),
-                                //           hintText: "Search for expense name",
-                                //           border: OutlineInputBorder(
-                                //             borderRadius:
-                                //                 BorderRadius.circular(10),
-                                //           ),
-                                //         ),
-                                //       ),
-                                //     ),
-                                //     Padding(
-                                //       padding:
-                                //           const EdgeInsets.only(left: 10.0),
-                                //       child: TextButton.icon(
-                                //         style: TextButton.styleFrom(
-                                //           iconColor: Colors.white,
-                                //           shape: RoundedRectangleBorder(
-                                //             borderRadius:
-                                //                 BorderRadius.circular(8),
-                                //           ),
-                                //           backgroundColor:
-                                //               Color.fromRGBO(57, 181, 74, 1),
-                                //           fixedSize: Size(150, 40),
-                                //         ),
-                                //         onPressed: () {
-                                //           setState(() {
-                                //             query =
-                                //                 ''; // Clear the search query
-                                //             searchController
-                                //                 .clear(); // Clear the TextField
-                                //           });
-                                //         },
-                                //         icon: Icon(Icons.search),
-                                //         label: Text(
-                                //           'Search',
-                                //           style: TextStyle(
-                                //             fontWeight: FontWeight.w900,
-                                //             color: Colors.white,
-                                //             fontSize: 17,
-                                //           ),
-                                //         ),
-                                //       ),
-                                //     ),
-                                //   ],
-                                // ),
-                              ],
+            Expanded(
+                child: Container(
+              width: MediaQuery.of(context).size.width - 70,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Container(
+                  child: ListView(
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Expense Tracker",
+                            style: TextStyle(
+                              fontSize: 30,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  TextButton.icon(
-                                    style: TextButton.styleFrom(
-                                        iconColor: Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                        backgroundColor:
-                                            Color.fromRGBO(57, 181, 74, 1),
-                                        fixedSize: Size(200, 40)),
-                                    onPressed: () {
-                                      context.go('/expensetrackerform');
-                                    },
-                                    icon: Icon(Icons.add),
-                                    label: const Text(
-                                      'Add New Expense ',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w900,
-                                          color: Colors.white,
-                                          fontSize: 17),
-                                    ),
-                                  )
-                                ],
+                          ),
+                          Container(
+                            width: 300,
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextField(
+                              controller: _searchController,
+                              decoration: InputDecoration(
+                                labelText: 'Search expenses name',
+                                prefixIcon: Icon(Icons.search),
+                                border: OutlineInputBorder(),
                               ),
                             ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: StreamBuilder<QuerySnapshot>(
-                                    stream: FirebaseFirestore.instance
-                                        .collection('expensestracker')
-                                        .snapshots(),
-                                    builder: (context, snapshot) {
-                                      // Check connection state
-                                      if (snapshot.connectionState ==
-                                          ConnectionState.waiting) {
-                                        return Center(
-                                            child: CircularProgressIndicator());
-                                      }
-
-                                      // Check for errors in the snapshot
-                                      if (snapshot.hasError) {
-                                        return Center(
-                                            child: Text(
-                                                'Error: ${snapshot.error}'));
-                                      }
-
-                                      // Ensure snapshot has data
-                                      if (!snapshot.hasData ||
-                                          snapshot.data!.docs.isEmpty) {
-                                        return Center(
-                                            child: Text('No expenses found.'));
-                                      }
-
-                                      final expenses = snapshot.data!.docs;
-
-                                      // Group expenses by month and year
-                                      final groupedExpenses = <String,
-                                          List<Map<String, dynamic>>>{};
-
-                                      for (var expenseSnapshot in expenses) {
-                                        final expenseData = expenseSnapshot
-                                            .data() as Map<String, dynamic>;
-                                        var dateField = expenseData['date'];
-                                        DateTime? date;
-
-                                        // Capture the docID for this particular expense
-                                        final docID = expenseSnapshot.id;
-                                        print(
-                                            docID); // This should print the unique docID for each expense
-
-                                        // Add the docID to the expense data (important!)
-                                        expenseData['docID'] = docID;
-
-                                        // Handle date format (Timestamp or String)
-                                        if (dateField is Timestamp) {
-                                          date = dateField.toDate();
-                                        } else if (dateField is String) {
-                                          try {
-                                            date = DateTime.parse(dateField);
-                                          } catch (e) {
-                                            print(
-                                                'Error parsing date: $dateField');
-                                          }
-                                        }
-
-                                        if (date != null) {
-                                          final monthYear =
-                                              "${date.year}-${date.month.toString().padLeft(2, '0')}";
-                                          groupedExpenses.putIfAbsent(
-                                              monthYear, () => []);
-                                          groupedExpenses[monthYear]!
-                                              .add(expenseData);
-                                        }
-                                      }
-
-                                      final months = [
-                                        'January',
-                                        'February',
-                                        'March',
-                                        'April',
-                                        'May',
-                                        'June',
-                                        'July',
-                                        'August',
-                                        'September',
-                                        'October',
-                                        'November',
-                                        'December'
-                                      ];
-
-                                      return SingleChildScrollView(
-                                        child: Column(
-                                          children: months.map((month) {
-                                            final monthYear =
-                                                "2024-${(months.indexOf(month) + 1).toString().padLeft(2, '0')}";
-                                            final expensesForMonth =
-                                                groupedExpenses[monthYear] ??
-                                                    [];
-
-                                            if (expensesForMonth.isEmpty) {
-                                              return SizedBox.shrink();
-                                            }
-
-                                            final filteredExpenses =
-                                                expensesForMonth
-                                                    .where((expense) {
-                                              final title = expense['title']
-                                                      ?.toLowerCase() ??
-                                                  '';
-                                              return title
-                                                  .toString()
-                                                  .contains(_searchQuery);
-                                            }).toList();
-
-                                            if (filteredExpenses.isEmpty) {
-                                              return SizedBox.shrink();
-                                            }
-
-                                            return Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 25),
-                                                  child: Text(
-                                                    month,
-                                                    style: TextStyle(
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                ),
-                                                ListView.builder(
-                                                  shrinkWrap: true,
-                                                  physics:
-                                                      NeverScrollableScrollPhysics(),
-                                                  itemCount:
-                                                      expensesForMonth.length,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    final expense =
-                                                        expensesForMonth[index];
-                                                    final date =
-                                                        (expense['date']
-                                                                as Timestamp)
-                                                            .toDate();
-                                                    final docID = expense[
-                                                        'docID']; // Now docID is part of expense
-                                                    final expensetotal =
-                                                        NumberFormat.currency(
-                                                      locale:
-                                                          'en_PH', // Use Philippine locale
-                                                      symbol:
-                                                          '₱', // Currency symbol
-                                                      decimalDigits: 2,
-                                                    ).format(expense['total']);
-                                                    return Card(
-                                                      child: ListTile(
-                                                        subtitle: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Container(
-                                                              width: (MediaQuery.of(
-                                                                              context)
-                                                                          .size
-                                                                          .width -
-                                                                      500) /
-                                                                  8,
-                                                              child: IconButton(
-                                                                onPressed: () {
-                                                                  // Example: using docID
-                                                                  context.go(
-                                                                      '/expensetrackerformedit/$docID');
-                                                                },
-                                                                icon: Icon(
-                                                                    Icons.edit,
-                                                                    color: Color
-                                                                        .fromRGBO(
-                                                                            57,
-                                                                            181,
-                                                                            74,
-                                                                            1)),
-                                                              ),
-                                                            ),
-                                                            Expanded(
-                                                              child: Container(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                child: Text(
-                                                                    '${expense['title'] ?? 'No Title'}'),
-                                                              ),
-                                                            ),
-                                                            Expanded(
-                                                              child: Container(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                child: Text(
-                                                                    '${expense['type'] ?? 'N/A'}'),
-                                                              ),
-                                                            ),
-                                                            Expanded(
-                                                              child: Container(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                child: Text(
-                                                                    '${expensetotal}'),
-                                                              ),
-                                                            ),
-                                                            Expanded(
-                                                              child: Container(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                child: Text(
-                                                                    '${DateFormat.yMMMMd('en_US').format(date)}'),
-                                                              ),
-                                                            ),
-                                                            Container(
-                                                              width: (MediaQuery.of(
-                                                                              context)
-                                                                          .size
-                                                                          .width -
-                                                                      500) /
-                                                                  8,
-                                                              child: IconButton(
-                                                                onPressed: () {
-                                                                  FirebaseFirestore
-                                                                      .instance
-                                                                      .collection(
-                                                                          'expensestracker')
-                                                                      .doc(docID
-                                                                          as String)
-                                                                      .delete();
-                                                                  context.go(
-                                                                      '/expensetracker');
-                                                                },
-                                                                icon: Icon(
-                                                                    Icons
-                                                                        .delete,
-                                                                    color: Colors
-                                                                        .red),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    );
-                                                  },
-                                                ),
-                                              ],
-                                            );
-                                          }).toList(),
-                                        ),
-                                      );
-                                    },
+                          ),
+                          // Row(
+                          //   children: [
+                          //     Container(
+                          //       width: 450,
+                          //       height: 50,
+                          //       child: TextField(
+                          //         controller: searchController,
+                          //         onChanged: (value) {
+                          //           setState(() {
+                          //             query =
+                          //                 value; // Update the search query on text change
+                          //           });
+                          //         },
+                          //         decoration: InputDecoration(
+                          //           contentPadding: EdgeInsets.all(15),
+                          //           prefixIcon: Icon(Icons.search),
+                          //           prefixIconColor:
+                          //               Color.fromRGBO(171, 187, 194, 1),
+                          //           fillColor:
+                          //               Color.fromRGBO(57, 60, 73, 1),
+                          //           filled: true,
+                          //           hintStyle: TextStyle(
+                          //               color: Color.fromRGBO(
+                          //                   171, 187, 194, 1)),
+                          //           hintText: "Search for expense name",
+                          //           border: OutlineInputBorder(
+                          //             borderRadius:
+                          //                 BorderRadius.circular(10),
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ),
+                          //     Padding(
+                          //       padding:
+                          //           const EdgeInsets.only(left: 10.0),
+                          //       child: TextButton.icon(
+                          //         style: TextButton.styleFrom(
+                          //           iconColor: Colors.white,
+                          //           shape: RoundedRectangleBorder(
+                          //             borderRadius:
+                          //                 BorderRadius.circular(8),
+                          //           ),
+                          //           backgroundColor:
+                          //               Color.fromRGBO(57, 181, 74, 1),
+                          //           fixedSize: Size(150, 40),
+                          //         ),
+                          //         onPressed: () {
+                          //           setState(() {
+                          //             query =
+                          //                 ''; // Clear the search query
+                          //             searchController
+                          //                 .clear(); // Clear the TextField
+                          //           });
+                          //         },
+                          //         icon: Icon(Icons.search),
+                          //         label: Text(
+                          //           'Search',
+                          //           style: TextStyle(
+                          //             fontWeight: FontWeight.w900,
+                          //             color: Colors.white,
+                          //             fontSize: 17,
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton.icon(
+                              style: TextButton.styleFrom(
+                                  iconColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
-                                ),
-                                SizedBox(width: 10),
-                                Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 4,
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                            padding: EdgeInsets.all(20),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                              color: Colors.white,
-                                            ),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Expanded(
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Text(
-                                                        "CURRENT MONTH",
-                                                        style: TextStyle(
-                                                            fontSize: 25,
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                      SizedBox(height: 20),
-                                                      Text(
-                                                        "${formattedValue}",
-                                                        style: TextStyle(
-                                                            fontSize: 30,
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                )
-                                              ],
-                                            )),
-                                        SizedBox(height: 20),
-                                        Container(
-                                            padding: EdgeInsets.all(20),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                              color: Colors.white,
-                                            ),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Expanded(
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Text(
-                                                        "LAST MONTH",
-                                                        style: TextStyle(
-                                                            fontSize: 25,
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                      SizedBox(height: 20),
-                                                      Text(
-                                                        "${formattedValue2}",
-                                                        style: TextStyle(
-                                                            fontSize: 30,
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                )
-                                              ],
-                                            )),
-                                      ],
-                                    ))
-                              ],
+                                  backgroundColor:
+                                      Color.fromRGBO(57, 181, 74, 1),
+                                  fixedSize: Size(200, 40)),
+                              onPressed: () {
+                                context.go('/expensetrackerform');
+                              },
+                              icon: Icon(Icons.add),
+                              label: const Text(
+                                'Add New Expense ',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w900,
+                                    color: Colors.white,
+                                    fontSize: 17),
+                              ),
                             )
                           ],
                         ),
                       ),
-                    ),
-                  );
-                } else {
-                  return SizedBox();
-                }
-              },
-            )
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: StreamBuilder<QuerySnapshot>(
+                              stream: FirebaseFirestore.instance
+                                  .collection('expensestracker')
+                                  .snapshots(),
+                              builder: (context, snapshot) {
+                                // Check connection state
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return Center(
+                                      child: CircularProgressIndicator());
+                                }
+
+                                // Check for errors in the snapshot
+                                if (snapshot.hasError) {
+                                  return Center(
+                                      child: Text('Error: ${snapshot.error}'));
+                                }
+
+                                // Ensure snapshot has data
+                                if (!snapshot.hasData ||
+                                    snapshot.data!.docs.isEmpty) {
+                                  return Center(
+                                      child: Text('No expenses found.'));
+                                }
+
+                                final expenses = snapshot.data!.docs;
+
+                                // Group expenses by month and year
+                                final groupedExpenses =
+                                    <String, List<Map<String, dynamic>>>{};
+
+                                for (var expenseSnapshot in expenses) {
+                                  final expenseData = expenseSnapshot.data()
+                                      as Map<String, dynamic>;
+                                  var dateField = expenseData['date'];
+                                  DateTime? date;
+
+                                  // Capture the docID for this particular expense
+                                  final docID = expenseSnapshot.id;
+                                  print(
+                                      docID); // This should print the unique docID for each expense
+
+                                  // Add the docID to the expense data (important!)
+                                  expenseData['docID'] = docID;
+
+                                  // Handle date format (Timestamp or String)
+                                  if (dateField is Timestamp) {
+                                    date = dateField.toDate();
+                                  } else if (dateField is String) {
+                                    try {
+                                      date = DateTime.parse(dateField);
+                                    } catch (e) {
+                                      print('Error parsing date: $dateField');
+                                    }
+                                  }
+
+                                  if (date != null) {
+                                    final monthYear =
+                                        "${date.year}-${date.month.toString().padLeft(2, '0')}";
+                                    groupedExpenses.putIfAbsent(
+                                        monthYear, () => []);
+                                    groupedExpenses[monthYear]!
+                                        .add(expenseData);
+                                  }
+                                }
+
+                                final months = [
+                                  'January',
+                                  'February',
+                                  'March',
+                                  'April',
+                                  'May',
+                                  'June',
+                                  'July',
+                                  'August',
+                                  'September',
+                                  'October',
+                                  'November',
+                                  'December'
+                                ];
+
+                                return SingleChildScrollView(
+                                  child: Column(
+                                    children: months.map((month) {
+                                      var year = DateTime.now().year;
+                                      final monthYear =
+                                          "${year}-${(months.indexOf(month) + 1).toString().padLeft(2, '0')}";
+                                      final expensesForMonth =
+                                          groupedExpenses[monthYear] ?? [];
+
+                                      if (expensesForMonth.isEmpty) {
+                                        return SizedBox.shrink();
+                                      }
+
+                                      final filteredExpenses =
+                                          expensesForMonth.where((expense) {
+                                        final title =
+                                            expense['title']?.toLowerCase() ??
+                                                '';
+                                        return title
+                                            .toString()
+                                            .contains(_searchQuery);
+                                      }).toList();
+
+                                      if (filteredExpenses.isEmpty) {
+                                        return SizedBox.shrink();
+                                      }
+
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 25),
+                                            child: Text(
+                                              month,
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          ListView.builder(
+                                            shrinkWrap: true,
+                                            physics:
+                                                NeverScrollableScrollPhysics(),
+                                            itemCount: expensesForMonth.length,
+                                            itemBuilder: (context, index) {
+                                              final expense =
+                                                  expensesForMonth[index];
+                                              final date =
+                                                  (expense['date'] as Timestamp)
+                                                      .toDate();
+                                              final docID = expense[
+                                                  'docID']; // Now docID is part of expense
+                                              final expensetotal =
+                                                  NumberFormat.currency(
+                                                locale:
+                                                    'en_PH', // Use Philippine locale
+                                                symbol: '₱', // Currency symbol
+                                                decimalDigits: 2,
+                                              ).format(expense['total']);
+                                              return Card(
+                                                child: ListTile(
+                                                  subtitle: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Container(
+                                                        width: (MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width -
+                                                                500) /
+                                                            8,
+                                                        child: IconButton(
+                                                          onPressed: () {
+                                                            // Example: using docID
+                                                            context.go(
+                                                                '/expensetrackerformedit/$docID');
+                                                          },
+                                                          icon: Icon(Icons.edit,
+                                                              color: Color
+                                                                  .fromRGBO(
+                                                                      57,
+                                                                      181,
+                                                                      74,
+                                                                      1)),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        child: Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Text(
+                                                              '${expense['title'] ?? 'No Title'}'),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        child: Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Text(
+                                                              '${expense['type'] ?? 'N/A'}'),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        child: Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Text(
+                                                              '${expensetotal}'),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        child: Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Text(
+                                                              '${DateFormat.yMMMMd('en_US').format(date)}'),
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        width: (MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width -
+                                                                500) /
+                                                            8,
+                                                        child: IconButton(
+                                                          onPressed: () {
+                                                            FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    'expensestracker')
+                                                                .doc(docID
+                                                                    as String)
+                                                                .delete();
+                                                            context.go(
+                                                                '/expensetracker');
+                                                          },
+                                                          icon: Icon(
+                                                              Icons.delete,
+                                                              color:
+                                                                  Colors.red),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    }).toList(),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Container(
+                              width: MediaQuery.of(context).size.width / 4,
+                              child: Column(
+                                children: [
+                                  Container(
+                                      padding: EdgeInsets.all(20),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: Colors.white,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  "CURRENT MONTH",
+                                                  style: TextStyle(
+                                                      fontSize: 25,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                SizedBox(height: 20),
+                                                Text(
+                                                  "${formattedValue}",
+                                                  style: TextStyle(
+                                                      fontSize: 30,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      )),
+                                  SizedBox(height: 20),
+                                  Container(
+                                      padding: EdgeInsets.all(20),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: Colors.white,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  "LAST MONTH",
+                                                  style: TextStyle(
+                                                      fontSize: 25,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                SizedBox(height: 20),
+                                                Text(
+                                                  "${formattedValue2}",
+                                                  style: TextStyle(
+                                                      fontSize: 30,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      )),
+                                ],
+                              ))
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ))
           ],
         ),
       ),
