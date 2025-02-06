@@ -57,6 +57,11 @@ class GetProduct extends FirestoreEvent {
   final int code;
 }
 
+class GetReceipt extends FirestoreEvent {
+  GetReceipt(this.code);
+  final int code;
+}
+
 class UpdateProduct extends FirestoreEvent {
   UpdateProduct(this.product);
   final ProductModel product;

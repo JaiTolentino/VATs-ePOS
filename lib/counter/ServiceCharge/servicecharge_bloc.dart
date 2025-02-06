@@ -39,7 +39,8 @@ class ServicechargeBloc extends Bloc<ServicechargeEvent, ServicechargeState> {
         try {
           List<ProductModel> products = event.products;
           products.forEach((data) {
-            subTotal = subTotal + data.price;
+            subTotal = subTotal + (data.price * data.quantity);
+            print('subtotal: $subTotal');
             vat = subTotal * 0.12;
             total = subTotal + vat + event.serviceCharge;
             change = total - event.cash;

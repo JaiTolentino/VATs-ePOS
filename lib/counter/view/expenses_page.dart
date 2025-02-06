@@ -105,6 +105,20 @@ class _ExpensesViewState extends State<ExpensesView> {
                   },
                 ),
                 SideMenuItem(
+                  icon: Icon(Icons.report),
+                  onTap: (index, sideMenuController) {
+                    sideMenuController.changePage(index);
+                    context.go('/financialreport');
+                  },
+                ),
+                SideMenuItem(
+                  icon: Icon(Icons.list),
+                  onTap: (index, sideMenuController) {
+                    sideMenuController.changePage(index);
+                    context.go('/expensetracker');
+                  },
+                ),
+                SideMenuItem(
                   icon: Icon(Icons.exit_to_app),
                   onTap: (index, sideMenuController) {
                     BlocProvider.of<AuthBloc>(context).add(SignOutUser());
@@ -210,8 +224,7 @@ class _ExpensesViewState extends State<ExpensesView> {
                                   return Padding(
                                     padding: const EdgeInsets.all(20.0),
                                     child: GestureDetector(
-                                      onTap: () async {
-                                        print('taptap');
+                                      onDoubleTap: () async {
                                         final status =
                                             await permissionCamera.request();
                                         if (status.isGranted) {
@@ -282,51 +295,53 @@ class _ExpensesViewState extends State<ExpensesView> {
                                                                   820
                                                               ? 100
                                                               : 120,
-                                                          child: Container(
-                                                            margin:
-                                                                EdgeInsets.only(
-                                                                    right: 10,
-                                                                    top: 10),
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                                    top: 3,
-                                                                    bottom: 3,
-                                                                    right: 8,
-                                                                    left: 8),
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          12),
-                                                              border:
-                                                                  Border.all(
-                                                                color: Colors
-                                                                    .white,
-                                                                width: 0.5,
+                                                          child:
+                                                              GestureDetector(
+                                                            onTap: () {
+                                                              context.go(
+                                                                '/viewreceipt/${state.userReceipts[index].referenceNumber}',
+                                                              );
+                                                            },
+                                                            child: Container(
+                                                              margin: EdgeInsets
+                                                                  .only(
+                                                                      right: 10,
+                                                                      top: 10),
+                                                              padding: EdgeInsets
+                                                                  .only(
+                                                                      top: 3,
+                                                                      bottom: 3,
+                                                                      right: 8,
+                                                                      left: 8),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            12),
+                                                                border:
+                                                                    Border.all(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  width: 0.5,
+                                                                ),
                                                               ),
-                                                            ),
-                                                            child: Center(
-                                                              child: Text(
-                                                                receipts[index]
-                                                                        .receiptCategory
-                                                                        .isEmpty
-                                                                    ? 'No Tag'
-                                                                    : receipts[
-                                                                            index]
-                                                                        .receiptCategory,
-                                                                maxLines: 1,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        10),
+                                                              child: Center(
+                                                                child: Text(
+                                                                  'View Receipt',
+                                                                  maxLines: 1,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontSize:
+                                                                          10),
+                                                                ),
                                                               ),
                                                             ),
                                                           ),
@@ -573,13 +588,7 @@ class _ExpensesViewState extends State<ExpensesView> {
                                                             ),
                                                             child: Center(
                                                               child: Text(
-                                                                receipts[index]
-                                                                        .receiptCategory
-                                                                        .isEmpty
-                                                                    ? 'No Tag'
-                                                                    : receipts[
-                                                                            index]
-                                                                        .receiptCategory,
+                                                                'View Receipt',
                                                                 maxLines: 1,
                                                                 overflow:
                                                                     TextOverflow

@@ -38,6 +38,11 @@ class FirestoreReceiptsLoaded extends FirestoreState {
   FirestoreReceiptsLoaded(this.userReceipts);
 }
 
+class FirestoreReceiptLoaded extends FirestoreState {
+  final ReceiptModel receipt;
+  FirestoreReceiptLoaded(this.receipt);
+}
+
 class FirestoreReceiptsUpdated extends FirestoreState {
   final List<ReceiptModel> userReceipts;
   FirestoreReceiptsUpdated(this.userReceipts);
