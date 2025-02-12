@@ -75,7 +75,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         emit(ProductLoading());
         try {
           list.forEach((data) {
-            subTotal = subTotal + data.price;
+            subTotal = subTotal + (data.price * data.quantity);
           });
           subTotal += event.serviceCharge;
           vat = subTotal * 0.12;

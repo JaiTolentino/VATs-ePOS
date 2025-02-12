@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:posadmin/counter/Auth/auth_bloc.dart';
 import 'package:posadmin/counter/cubit/login_cubit.dart';
 import 'package:posadmin/counter/cubit/search_cubit.dart';
@@ -409,7 +410,7 @@ class _InventoryViewState extends State<InventoryView> {
                                                       100) /
                                                   8,
                                               child: Text(
-                                                '₱ ${products[index].price}',
+                                                '₱ ${NumberFormat("#,##0.00").format(products[index].price)}',
                                                 style: TextStyle(
                                                     color: Color.fromRGBO(
                                                         92, 111, 136, 1),
@@ -735,7 +736,7 @@ class _InventoryViewState extends State<InventoryView> {
                                                           FontWeight.w600),
                                                 ),
                                                 Text(
-                                                  '₱ ${products[index].price}',
+                                                  '₱ ${NumberFormat("#,##0.00").format(products[index].price)}',
                                                   style: TextStyle(
                                                       color: Color.fromRGBO(
                                                           92, 111, 136, 1),

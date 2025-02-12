@@ -429,9 +429,15 @@ class _PosViewState extends State<PosView> {
                                                           )
                                                         : Placeholder(),
                                                   ),
-                                                  Text(products[index].name),
                                                   Text(
-                                                      "₱ ${products[index].price}"),
+                                                    products[index].name,
+                                                    textAlign: TextAlign.center,
+                                                    maxLines: 3,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  Text(
+                                                      "₱ ${NumberFormat("#,##0.00").format(products[index].price)}"),
                                                   Text(
                                                     products[index].quantity <=
                                                             0
@@ -687,7 +693,7 @@ class _PosViewState extends State<PosView> {
                                                   ),
                                                   Text(products[index].name),
                                                   Text(
-                                                      "₱ ${products[index].price}"),
+                                                      "₱ ${NumberFormat("#,##0.00").format(products[index].price)}"),
                                                   Text(
                                                     products[index].quantity <=
                                                             0
@@ -870,14 +876,15 @@ class _PosViewState extends State<PosView> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text('VAT 12%'),
-                              Text('₱ ${vat.toStringAsFixed(2)}'),
+                              Text('₱ ${NumberFormat("#,##0.00").format(vat)}'),
                             ],
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text('Total'),
-                              Text('₱ ${total.toStringAsFixed(2)}'),
+                              Text(
+                                  '₱ ${NumberFormat("#,##0.00").format(total)}'),
                             ],
                           ),
                           Padding(
@@ -1149,7 +1156,8 @@ class _PosViewState extends State<PosView> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text('Sub Total'),
-                              Text('₱ $subtotal'),
+                              Text(
+                                  '₱ ${NumberFormat("#,##0.00").format(subtotal)}'),
                             ],
                           ),
                           // Row(
@@ -1163,14 +1171,15 @@ class _PosViewState extends State<PosView> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text('VAT 12%'),
-                              Text('₱ ${vat.toStringAsFixed(2)}'),
+                              Text('₱ ${NumberFormat("#,##0.00").format(vat)}'),
                             ],
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text('Total'),
-                              Text('₱ ${total.toStringAsFixed(2)}'),
+                              Text(
+                                  '₱ ${NumberFormat("#,##0.00").format(total)}'),
                             ],
                           ),
                           Padding(
@@ -1491,14 +1500,15 @@ class _PosViewState extends State<PosView> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text('VAT 12%'),
-                              Text('₱ ${vat.toStringAsFixed(2)}'),
+                              Text('₱ ${NumberFormat("#,##0.00").format(vat)}'),
                             ],
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text('Total'),
-                              Text('₱ ${total.toStringAsFixed(2)}'),
+                              Text(
+                                  '₱ ${NumberFormat("#,##0.00").format(total)}'),
                             ],
                           ),
                           Padding(
@@ -1544,7 +1554,8 @@ class _PosViewState extends State<PosView> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text('Change'),
-                                Text('₱ ${change.toStringAsFixed(2)}'),
+                                Text(
+                                    '₱ ${NumberFormat("#,##0.00").format(change)}'),
                               ],
                             ),
                           ),
