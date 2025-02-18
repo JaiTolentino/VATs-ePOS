@@ -16,10 +16,11 @@ class FirestoreService {
       FirebaseFirestore.instance.collection('Receipts');
   final storageRef = FirebaseStorage.instance.ref();
 
-  Future<void> assignReceiptToUser(int referenceNumber, String email) {
+  Future<void> assignReceiptToUser(
+      int referenceNumber, String email, String fullName) {
     return receiptsData
         .doc(referenceNumber.toString())
-        .update({'userEmail': email});
+        .update({'userEmail': email, 'customerName': fullName});
   }
 
   Future<Iterable<ReceiptModel>> getReceipts() {
@@ -277,7 +278,7 @@ class FirestoreService {
     return products;
   }
 
-  Future<void> updateProductQuantity(int code, bool isAdd) async {
+  Future<void> updateProductQuantity(int code, bool isAdd, int quantity) async {
     final DocumentReference<Object?> data = productData.doc(code.toString());
     final product = await data.get().then((doc) {
       final data = doc.data() as Map<String, dynamic>;
@@ -293,7 +294,7 @@ class FirestoreService {
     if (isAdd) {
       productData
           .doc(code.toString())
-          .update({'quantity': product.quantity + 1});
+          .update({'quantity': product.quantity + quantity});
     } else {
       productData
           .doc(code.toString())

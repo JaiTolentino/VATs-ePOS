@@ -72,6 +72,23 @@ class _PosViewState extends State<PosView> {
     SideMenuController sideMenuController = SideMenuController(initialPage: 0);
     List<ProductModel> temporaryProductList = [];
     String typeHeader = 'Tires';
+    void clearCart(BuildContext context) {
+      final state = context.read<ProductBloc>().state;
+      if (state is ProductUpdated || state is ProductLoaded) {
+        final List<ProductModel> products =
+            (state as dynamic).products as List<ProductModel>? ?? [];
+
+        if (products.isNotEmpty) {
+          for (ProductModel product in products) {
+            context.read<FirestoreBloc>().add(
+                  UpdateProductQuantity(
+                      product.productCode, true, typeHeader, product.quantity),
+                );
+          }
+        }
+      }
+    }
+
     return PopScope(
       canPop: false,
       child: Scaffold(
@@ -98,6 +115,7 @@ class _PosViewState extends State<PosView> {
                   ),
                   onTap: (index, sideMenuController) {
                     sideMenuController.changePage(index);
+                    clearCart(context);
                     context.go('/pos');
                   },
                 ),
@@ -105,6 +123,7 @@ class _PosViewState extends State<PosView> {
                   icon: Icon(Icons.receipt),
                   onTap: (index, sideMenuController) {
                     sideMenuController.changePage(index);
+                    clearCart(context);
                     context.go('/expenses');
                   },
                 ),
@@ -112,20 +131,23 @@ class _PosViewState extends State<PosView> {
                   icon: Icon(Icons.inventory),
                   onTap: (index, sideMenuController) {
                     sideMenuController.changePage(index);
+                    clearCart(context);
                     context.go('/inventory');
                   },
                 ),
                 SideMenuItem(
-                  icon: Icon(Icons.report),
+                  icon: Icon(Icons.calculate),
                   onTap: (index, sideMenuController) {
                     sideMenuController.changePage(index);
+                    clearCart(context);
                     context.go('/financialreport');
                   },
                 ),
                 SideMenuItem(
-                  icon: Icon(Icons.list),
+                  icon: Icon(Icons.attach_money),
                   onTap: (index, sideMenuController) {
                     sideMenuController.changePage(index);
+                    clearCart(context);
                     context.go('/expensetracker');
                   },
                 ),
@@ -133,6 +155,7 @@ class _PosViewState extends State<PosView> {
                   icon: Icon(Icons.exit_to_app),
                   onTap: (index, sideMenuController) {
                     BlocProvider.of<AuthBloc>(context).add(SignOutUser());
+                    clearCart(context);
                     context.go('/');
                   },
                 ),
@@ -256,14 +279,14 @@ class _PosViewState extends State<PosView> {
                                     onTap: () {
                                       BlocProvider.of<FirestoreBloc>(context)
                                           .add(
-                                        GetSpecificProducts('Gear Oils'),
+                                        GetSpecificProducts('Oils'),
                                       );
-                                      typeHeader = 'Gear Oils';
+                                      typeHeader = 'Oils';
                                     },
                                     child: Text(
-                                      'Gear Oils',
+                                      'Oils',
                                       style: TextStyle(
-                                        color: typeHeader == 'Gear Oils'
+                                        color: typeHeader == 'Oils'
                                             ? Color.fromRGBO(57, 181, 74, 1)
                                             : Colors.white,
                                       ),
@@ -304,14 +327,14 @@ class _PosViewState extends State<PosView> {
                                     onTap: () {
                                       BlocProvider.of<FirestoreBloc>(context)
                                           .add(
-                                        GetSpecificProducts('Gloves'),
+                                        GetSpecificProducts('Air Filter'),
                                       );
-                                      typeHeader = 'Gloves';
+                                      typeHeader = 'Air Filter';
                                     },
                                     child: Text(
-                                      'Gloves',
+                                      'Air Filter',
                                       style: TextStyle(
-                                        color: typeHeader == 'Gloves'
+                                        color: typeHeader == 'Air Filter'
                                             ? Color.fromRGBO(57, 181, 74, 1)
                                             : Colors.white,
                                       ),
@@ -397,7 +420,8 @@ class _PosViewState extends State<PosView> {
                                                 UpdateProductQuantity(
                                                     products[index].productCode,
                                                     false,
-                                                    typeHeader),
+                                                    typeHeader,
+                                                    1),
                                               );
                                             } else {
                                               const snack = SnackBar(
@@ -569,11 +593,11 @@ class _PosViewState extends State<PosView> {
                                     onTap: () {
                                       BlocProvider.of<FirestoreBloc>(context)
                                           .add(
-                                        GetSpecificProducts('Gear Oils'),
+                                        GetSpecificProducts('Oils'),
                                       );
-                                      typeHeader = 'Gear Oils';
+                                      typeHeader = 'Oils';
                                     },
-                                    child: Text('Gear Oils')),
+                                    child: Text('Oils')),
                                 GestureDetector(
                                     onTap: () {
                                       BlocProvider.of<FirestoreBloc>(context)
@@ -596,11 +620,11 @@ class _PosViewState extends State<PosView> {
                                     onTap: () {
                                       BlocProvider.of<FirestoreBloc>(context)
                                           .add(
-                                        GetSpecificProducts('Gloves'),
+                                        GetSpecificProducts('Air Filter'),
                                       );
-                                      typeHeader = 'Gloves';
+                                      typeHeader = 'Air Filter';
                                     },
-                                    child: Text('Gloves')),
+                                    child: Text('Air Filter')),
                                 GestureDetector(
                                     onTap: () {
                                       BlocProvider.of<FirestoreBloc>(context)
@@ -659,7 +683,8 @@ class _PosViewState extends State<PosView> {
                                                 UpdateProductQuantity(
                                                     products[index].productCode,
                                                     false,
-                                                    typeHeader),
+                                                    typeHeader,
+                                                    1),
                                               );
                                             } else {
                                               const snack = SnackBar(
@@ -786,7 +811,8 @@ class _PosViewState extends State<PosView> {
                                       UpdateProductQuantity(
                                           state.products[index].productCode,
                                           true,
-                                          typeHeader),
+                                          typeHeader,
+                                          1),
                                     );
                                   },
                                   child: Container(
@@ -969,8 +995,6 @@ class _PosViewState extends State<PosView> {
                                         Color.fromRGBO(57, 181, 74, 1),
                                     fixedSize: Size(150, 50)),
                                 onPressed: () {
-                                  BlocProvider.of<FirestoreBloc>(context)
-                                      .add(GetReceipts());
                                   if (state.products.length > 0 &&
                                       cashController.text.isNotEmpty) {
                                   } else {
@@ -1071,7 +1095,8 @@ class _PosViewState extends State<PosView> {
                                       UpdateProductQuantity(
                                           state.products[index].productCode,
                                           true,
-                                          typeHeader),
+                                          typeHeader,
+                                          1),
                                     );
                                   },
                                   child: Container(
@@ -1155,6 +1180,13 @@ class _PosViewState extends State<PosView> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
+                              Text('VAT 12%'),
+                              Text('₱ ${NumberFormat("#,##0.00").format(vat)}'),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
                               Text('Sub Total'),
                               Text(
                                   '₱ ${NumberFormat("#,##0.00").format(subtotal)}'),
@@ -1167,13 +1199,7 @@ class _PosViewState extends State<PosView> {
                           //     Text('₱ ${serviceCharge}'),
                           //   ],
                           // ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('VAT 12%'),
-                              Text('₱ ${NumberFormat("#,##0.00").format(vat)}'),
-                            ],
-                          ),
+
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -1274,8 +1300,6 @@ class _PosViewState extends State<PosView> {
                                         Color.fromRGBO(57, 181, 74, 1),
                                     fixedSize: Size(150, 50)),
                                 onPressed: () {
-                                  BlocProvider.of<FirestoreBloc>(context)
-                                      .add(GetReceipts());
                                   List<ProductModel> prods = state.products;
                                   if (state.products.length > 0 &&
                                       cashController.text.isNotEmpty &&
@@ -1284,7 +1308,7 @@ class _PosViewState extends State<PosView> {
                                       AddReceipt(
                                         ReceiptModel(
                                             '',
-                                            '',
+                                            'Block 52, Lot 33, Barangay Ponsagsama, Phase 2 C5, Taguig',
                                             DateTime.now().toLocal().year *
                                                 10000,
                                             serviceCharge,
@@ -1301,7 +1325,6 @@ class _PosViewState extends State<PosView> {
                                             prods),
                                       ),
                                     );
-
                                     context.go('/expenses');
                                   } else {
                                     const snackBar = SnackBar(
@@ -1401,7 +1424,8 @@ class _PosViewState extends State<PosView> {
                                       UpdateProductQuantity(
                                           state.products[index].productCode,
                                           true,
-                                          typeHeader),
+                                          typeHeader,
+                                          1),
                                     );
                                   },
                                   child: Container(
@@ -1613,8 +1637,6 @@ class _PosViewState extends State<PosView> {
                                         Color.fromRGBO(57, 181, 74, 1),
                                     fixedSize: Size(150, 50)),
                                 onPressed: () {
-                                  BlocProvider.of<FirestoreBloc>(context)
-                                      .add(GetReceipts());
                                   List<ProductModel> prods = state.products;
                                   if (state.products.length > 0 &&
                                       cashController.text.isNotEmpty &&
@@ -1623,7 +1645,7 @@ class _PosViewState extends State<PosView> {
                                       AddReceipt(
                                         ReceiptModel(
                                             '',
-                                            '',
+                                            'Block 52, Lot 33, Barangay Ponsagsama, Phase 2 C5, Taguig',
                                             DateTime.now().toLocal().year *
                                                 10000,
                                             serviceCharge,
@@ -1640,7 +1662,6 @@ class _PosViewState extends State<PosView> {
                                             prods),
                                       ),
                                     );
-
                                     context.go('/expenses');
                                   } else {
                                     const snackBar = SnackBar(

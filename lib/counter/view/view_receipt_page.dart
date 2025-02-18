@@ -56,8 +56,8 @@ class _EditProductViewState extends State<ViewReceiptView> {
       value: 'Tires',
     ),
     DropdownMenuItem(
-      child: Text('Gear Oils'),
-      value: 'Gear Oils',
+      child: Text('Oils'),
+      value: 'Oils',
     ),
     DropdownMenuItem(
       child: Text('Shocks'),
@@ -68,8 +68,8 @@ class _EditProductViewState extends State<ViewReceiptView> {
       value: 'Bolts',
     ),
     DropdownMenuItem(
-      child: Text('Gloves'),
-      value: 'Gloves',
+      child: Text('Air Filter'),
+      value: 'Air Filter',
     ),
     DropdownMenuItem(
       child: Text('Accessories'),
@@ -114,7 +114,7 @@ class _EditProductViewState extends State<ViewReceiptView> {
                     String formattedDate =
                         DateFormat('E, d MMM yyyy HH:mm:ss').format(dateTime);
 
-                    int subTotal = 0;
+                    double subTotal = 0;
                     double VAT = 0;
                     double Total;
                     List<int> totals = [];
@@ -129,7 +129,7 @@ class _EditProductViewState extends State<ViewReceiptView> {
                     }
 
                     VAT = subTotal * 0.12;
-                    Total = VAT + subTotal;
+                    Total = subTotal;
                     return Container(
                       height: MediaQuery.of(context).size.height,
                       width: MediaQuery.of(context).size.width,
@@ -350,10 +350,16 @@ class _EditProductViewState extends State<ViewReceiptView> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Text(
-                                                  product.name,
-                                                  style: TextStyle(
-                                                    color: Colors.black,
+                                                Container(
+                                                  width: 150,
+                                                  child: Text(
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    product.name,
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                    ),
                                                   ),
                                                 ),
                                                 Text(
@@ -399,13 +405,13 @@ class _EditProductViewState extends State<ViewReceiptView> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            'Subtotal',
+                                            'VAT',
                                             style: TextStyle(
                                               color: Colors.black,
                                             ),
                                           ),
                                           Text(
-                                            '${NumberFormat("#,##0.00").format(subTotal + state.receipt.serviceCharge)} PHP',
+                                            '${NumberFormat("#,##0.00").format(state.receipt.vat)} PHP',
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontWeight: FontWeight.w500,
@@ -418,13 +424,13 @@ class _EditProductViewState extends State<ViewReceiptView> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            'VAT',
+                                            'Subtotal',
                                             style: TextStyle(
                                               color: Colors.black,
                                             ),
                                           ),
                                           Text(
-                                            '${NumberFormat("#,##0.00").format(state.receipt.vat)} PHP',
+                                            '${NumberFormat("#,##0.00").format(subTotal + state.receipt.serviceCharge)} PHP',
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontWeight: FontWeight.w500,
@@ -450,7 +456,7 @@ class _EditProductViewState extends State<ViewReceiptView> {
                                             ),
                                           ),
                                           Text(
-                                            '${NumberFormat("#,##0.00").format(subTotal + state.receipt.serviceCharge + state.receipt.vat)} PHP',
+                                            '${NumberFormat("#,##0.00").format(subTotal + state.receipt.serviceCharge)} PHP',
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontWeight: FontWeight.w500,
@@ -488,7 +494,7 @@ class _EditProductViewState extends State<ViewReceiptView> {
                                             ),
                                           ),
                                           Text(
-                                            '${NumberFormat("#,##0.00").format(state.receipt.cash - (subTotal + state.receipt.serviceCharge + state.receipt.vat))} PHP',
+                                            '${NumberFormat("#,##0.00").format(state.receipt.cash - (subTotal + state.receipt.serviceCharge))} PHP',
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontWeight: FontWeight.w500,

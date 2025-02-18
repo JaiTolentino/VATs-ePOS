@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:easy_sidemenu/easy_sidemenu.dart';
@@ -51,9 +52,12 @@ class _ExpensesViewState extends State<ExpensesView> {
     if (user == null) {
       context.go('/');
     }
-    BlocProvider.of<FirestoreBloc>(context).add(
-      GetReceipts(),
-    );
+
+    Future.delayed(const Duration(seconds: 1)).then((val) {
+      BlocProvider.of<FirestoreBloc>(context).add(
+        GetReceipts(),
+      );
+    });
 
     super.initState();
   }
@@ -61,6 +65,7 @@ class _ExpensesViewState extends State<ExpensesView> {
   @override
   Widget build(BuildContext context) {
     SideMenuController sideMenuController = SideMenuController(initialPage: 1);
+
     return PopScope(
       canPop: false,
       child: Scaffold(
@@ -106,14 +111,14 @@ class _ExpensesViewState extends State<ExpensesView> {
                   },
                 ),
                 SideMenuItem(
-                  icon: Icon(Icons.report),
+                  icon: Icon(Icons.calculate),
                   onTap: (index, sideMenuController) {
                     sideMenuController.changePage(index);
                     context.go('/financialreport');
                   },
                 ),
                 SideMenuItem(
-                  icon: Icon(Icons.list),
+                  icon: Icon(Icons.attach_money),
                   onTap: (index, sideMenuController) {
                     sideMenuController.changePage(index);
                     context.go('/expensetracker');
@@ -239,6 +244,9 @@ class _ExpensesViewState extends State<ExpensesView> {
                                                           as Map<String,
                                                               dynamic>;
                                                       this.code = code;
+                                                      print(
+                                                          'fullname: ${json['fullName'].toString()}');
+                                                      log('fullname: ${json['fullName'].toString()}');
                                                       BlocProvider.of<
                                                                   FirestoreBloc>(
                                                               context)
@@ -249,6 +257,8 @@ class _ExpensesViewState extends State<ExpensesView> {
                                                                     index]
                                                                 .referenceNumber,
                                                             json['email']
+                                                                .toString(),
+                                                            json['fullName']
                                                                 .toString()),
                                                       );
                                                     });
@@ -506,6 +516,7 @@ class _ExpensesViewState extends State<ExpensesView> {
                                                           as Map<String,
                                                               dynamic>;
                                                       this.code = code;
+                                                      log('fullname: ${json['fullName'].toString()}');
                                                       BlocProvider.of<
                                                                   FirestoreBloc>(
                                                               context)
@@ -516,6 +527,8 @@ class _ExpensesViewState extends State<ExpensesView> {
                                                                     index]
                                                                 .referenceNumber,
                                                             json['email']
+                                                                .toString(),
+                                                            json['fullName']
                                                                 .toString()),
                                                       );
                                                     });

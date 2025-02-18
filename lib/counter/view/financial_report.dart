@@ -961,7 +961,7 @@ class _FinancialReportViewState extends State<FinancialReportView> {
                 ),
               ),
               style: SideMenuStyle(
-                unselectedIconColor: Colors.white,
+                unselectedIconColor: Color.fromRGBO(57, 181, 74, 1),
                 selectedIconColor: Colors.white,
                 selectedColor: Color.fromRGBO(57, 181, 74, 1),
                 backgroundColor: Color.fromRGBO(31, 29, 43, 1),
@@ -990,14 +990,14 @@ class _FinancialReportViewState extends State<FinancialReportView> {
                   },
                 ),
                 SideMenuItem(
-                  icon: Icon(Icons.report),
+                  icon: Icon(Icons.calculate),
                   onTap: (index, sideMenuController) {
                     sideMenuController.changePage(index);
                     context.go('/financialreport');
                   },
                 ),
                 SideMenuItem(
-                  icon: Icon(Icons.list),
+                  icon: Icon(Icons.attach_money),
                   onTap: (index, sideMenuController) {
                     sideMenuController.changePage(index);
                     context.go('/expensetracker');
