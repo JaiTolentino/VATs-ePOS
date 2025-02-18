@@ -54,8 +54,8 @@ class _EditProductViewState extends State<EditProductView> {
       value: 'Tires',
     ),
     DropdownMenuItem(
-      child: Text('Gear Oils'),
-      value: 'Gear Oils',
+      child: Text('Oils'),
+      value: 'Oils',
     ),
     DropdownMenuItem(
       child: Text('Shocks'),
@@ -66,8 +66,8 @@ class _EditProductViewState extends State<EditProductView> {
       value: 'Bolts',
     ),
     DropdownMenuItem(
-      child: Text('Gloves'),
-      value: 'Gloves',
+      child: Text('Air Filter'),
+      value: 'Air Filter',
     ),
     DropdownMenuItem(
       child: Text('Accessories'),

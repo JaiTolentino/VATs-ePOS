@@ -42,7 +42,7 @@ class ServicechargeBloc extends Bloc<ServicechargeEvent, ServicechargeState> {
             subTotal = subTotal + (data.price * data.quantity);
             print('subtotal: $subTotal');
             vat = subTotal * 0.12;
-            total = subTotal + vat + event.serviceCharge;
+            total = subTotal + event.serviceCharge;
             change = total - event.cash;
           });
           emit(GetComputaion(subTotal, vat, total, change));

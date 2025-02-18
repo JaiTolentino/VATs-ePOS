@@ -3,9 +3,10 @@ part of 'firestore_bloc.dart';
 abstract class FirestoreEvent {}
 
 class AssignReceiptToUser extends FirestoreEvent {
-  AssignReceiptToUser(this.referenceNumber, this.email);
+  AssignReceiptToUser(this.referenceNumber, this.email, this.fullName);
   final int referenceNumber;
   final String email;
+  final String fullName;
 }
 
 class AddReceipt extends FirestoreEvent {
@@ -46,10 +47,11 @@ class UpdateSpecificProducts extends FirestoreEvent {
 }
 
 class UpdateProductQuantity extends FirestoreEvent {
-  UpdateProductQuantity(this.code, this.isAdd, this.type);
+  UpdateProductQuantity(this.code, this.isAdd, this.type, this.quantity);
   final int code;
   final bool isAdd;
   final String type;
+  final int quantity;
 }
 
 class GetProduct extends FirestoreEvent {

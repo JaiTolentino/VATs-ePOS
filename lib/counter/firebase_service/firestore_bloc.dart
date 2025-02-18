@@ -16,7 +16,7 @@ class FirestoreBloc extends Bloc<FirestoreEvent, FirestoreState> {
         try {
           emit(FirestoreLoading());
           await firestoreService.assignReceiptToUser(
-              event.referenceNumber, event.email);
+              event.referenceNumber, event.email, event.fullName);
           final userReceipts = await firestoreService.getReceipts();
           emit(FirestoreReceiptsLoaded(userReceipts.toList()));
         } catch (e) {
@@ -28,7 +28,7 @@ class FirestoreBloc extends Bloc<FirestoreEvent, FirestoreState> {
       (event, emit) async {
         try {
           emit(FirestoreLoading());
-          await firestoreService.addReceipt(event.receipt);
+          final product = await firestoreService.addReceipt(event.receipt);
           emit(FirestoreOperationSuccess('Receipt added successfully'));
           print('success');
         } catch (e) {
@@ -136,11 +136,13 @@ class FirestoreBloc extends Bloc<FirestoreEvent, FirestoreState> {
       (event, emit) async {
         emit(FirestoreLoading());
         try {
-          await firestoreService.updateProductQuantity(event.code, event.isAdd);
+          await firestoreService.updateProductQuantity(
+              event.code, event.isAdd, event.quantity);
           final specificProducts =
               await firestoreService.getSpecificProducts(event.type);
           emit(FirestoreSpecificProductLoaded(specificProducts.toList()));
         } catch (e) {
+          print('errors $e');
           emit(FirestoreError('Failed to load specific Products'));
         }
       },

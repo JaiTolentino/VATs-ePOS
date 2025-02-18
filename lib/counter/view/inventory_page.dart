@@ -113,14 +113,14 @@ class _InventoryViewState extends State<InventoryView> {
                   },
                 ),
                 SideMenuItem(
-                  icon: Icon(Icons.report),
+                  icon: Icon(Icons.calculate),
                   onTap: (index, sideMenuController) {
                     sideMenuController.changePage(index);
                     context.go('/financialreport');
                   },
                 ),
                 SideMenuItem(
-                  icon: Icon(Icons.list),
+                  icon: Icon(Icons.attach_money),
                   onTap: (index, sideMenuController) {
                     sideMenuController.changePage(index);
                     context.go('/expensetracker');
@@ -703,55 +703,96 @@ class _InventoryViewState extends State<InventoryView> {
                                                   MainAxisAlignment.spaceAround,
                                               children: [
                                                 IconButton(
-                                                    onPressed: () {},
+                                                    onPressed: () {
+                                                      context.go(
+                                                          '/edit/${products[index].productCode}');
+                                                    },
                                                     icon: Icon(
                                                       Icons.edit,
                                                       color: Color.fromRGBO(
                                                           57, 181, 74, 1),
                                                     )),
-                                                Text(
-                                                  products[index].name,
-                                                  style: TextStyle(
-                                                      color: Color.fromRGBO(
-                                                          92, 111, 136, 1),
-                                                      fontWeight:
-                                                          FontWeight.w600),
+                                                Container(
+                                                  width: (MediaQuery.of(context)
+                                                              .size
+                                                              .width -
+                                                          100) /
+                                                      8,
+                                                  child: Text(
+                                                    products[index].name,
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        color: Color.fromRGBO(
+                                                            92, 111, 136, 1),
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
                                                 ),
-                                                Text(
-                                                  products[index]
-                                                      .productCode
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      color: Color.fromRGBO(
-                                                          92, 111, 136, 1),
-                                                      fontWeight:
-                                                          FontWeight.w600),
+                                                Container(
+                                                  width: (MediaQuery.of(context)
+                                                              .size
+                                                              .width -
+                                                          100) /
+                                                      8,
+                                                  child: Text(
+                                                    products[index]
+                                                        .productCode
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        color: Color.fromRGBO(
+                                                            92, 111, 136, 1),
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
                                                 ),
-                                                Text(
-                                                  products[index].type,
-                                                  style: TextStyle(
-                                                      color: Color.fromRGBO(
-                                                          92, 111, 136, 1),
-                                                      fontWeight:
-                                                          FontWeight.w600),
+                                                Container(
+                                                  width: (MediaQuery.of(context)
+                                                              .size
+                                                              .width -
+                                                          100) /
+                                                      8,
+                                                  child: Text(
+                                                    products[index].type,
+                                                    style: TextStyle(
+                                                        color: Color.fromRGBO(
+                                                            92, 111, 136, 1),
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
                                                 ),
-                                                Text(
-                                                  '₱ ${NumberFormat("#,##0.00").format(products[index].price)}',
-                                                  style: TextStyle(
-                                                      color: Color.fromRGBO(
-                                                          92, 111, 136, 1),
-                                                      fontWeight:
-                                                          FontWeight.w600),
+                                                Container(
+                                                  width: (MediaQuery.of(context)
+                                                              .size
+                                                              .width -
+                                                          100) /
+                                                      8,
+                                                  child: Text(
+                                                    '₱ ${NumberFormat("#,##0.00").format(products[index].price)}',
+                                                    style: TextStyle(
+                                                        color: Color.fromRGBO(
+                                                            92, 111, 136, 1),
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
                                                 ),
-                                                Text(
-                                                  products[index]
-                                                      .quantity
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      color: Color.fromRGBO(
-                                                          92, 111, 136, 1),
-                                                      fontWeight:
-                                                          FontWeight.w600),
+                                                Container(
+                                                  width: (MediaQuery.of(context)
+                                                              .size
+                                                              .width -
+                                                          100) /
+                                                      8,
+                                                  child: Text(
+                                                    products[index]
+                                                        .quantity
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        color: Color.fromRGBO(
+                                                            92, 111, 136, 1),
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
                                                 ),
                                                 GestureDetector(
                                                   onTap: () async {
@@ -777,26 +818,39 @@ class _InventoryViewState extends State<InventoryView> {
                                                   },
                                                   child: Container(
                                                     width: 80,
-                                                    child: Image.network(
-                                                      products[index].image!,
-                                                      fit: BoxFit.cover,
-                                                    ),
+                                                    child: state.products[index]
+                                                            .image!.isNotEmpty
+                                                        ? Image.network(
+                                                            state
+                                                                .products[index]
+                                                                .image!,
+                                                            fit: BoxFit.cover,
+                                                          )
+                                                        : Placeholder(),
                                                   ),
                                                 ),
-                                                IconButton(
-                                                    onPressed: () {
-                                                      BlocProvider.of<
-                                                                  FirestoreBloc>(
-                                                              context)
-                                                          .add(RemoveProduct(
-                                                              products[index]
-                                                                  .productCode));
-                                                      context.go('/inventory');
-                                                    },
-                                                    icon: Icon(
-                                                      Icons.delete,
-                                                      color: Colors.red,
-                                                    )),
+                                                Container(
+                                                  width: (MediaQuery.of(context)
+                                                              .size
+                                                              .width -
+                                                          500) /
+                                                      8,
+                                                  child: IconButton(
+                                                      onPressed: () {
+                                                        BlocProvider.of<
+                                                                    FirestoreBloc>(
+                                                                context)
+                                                            .add(RemoveProduct(
+                                                                products[index]
+                                                                    .productCode));
+                                                        context
+                                                            .go('/inventory');
+                                                      },
+                                                      icon: Icon(
+                                                        Icons.delete,
+                                                        color: Colors.red,
+                                                      )),
+                                                ),
                                               ],
                                             ),
                                           ),
