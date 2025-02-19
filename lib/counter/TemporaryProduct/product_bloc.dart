@@ -35,11 +35,10 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
           print('subtotal1: $subTotal');
           print('quantity: ${data.quantity}');
         });
-        subTotal += event.serviceCharge;
         vatableSales = subTotal / 1.12;
         vat = vatableSales * 0.12;
 
-        total = subTotal;
+        total = subTotal + event.serviceCharge;
         change = event.cash - total;
         print('CHANGEEEEE $change');
         emit(ProductUpdated(list, subTotal, total, vat, vatableSales));
@@ -60,11 +59,10 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
             subTotal = subTotal + (data.price * data.quantity);
             print('subtotal: $subTotal');
           });
-          subTotal += event.serviceCharge;
           vatableSales = subTotal / 1.12;
           vat = vatableSales * 0.12;
 
-          total = subTotal;
+          total = subTotal + event.serviceCharge;
           emit(ProductUpdated(list, subTotal, total, vat, vatableSales));
         } catch (e) {
           print(e);
@@ -84,11 +82,10 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
           list.forEach((data) {
             subTotal = subTotal + (data.price * data.quantity);
           });
-          subTotal += event.serviceCharge;
           vatableSales = subTotal / 1.12;
           vat = vatableSales * 0.12;
 
-          total = subTotal;
+          total = subTotal + event.serviceCharge;
           change = event.cash - total;
           emit(ProductChange(list, subTotal, change, total, vat, vatableSales));
         } catch (e) {
