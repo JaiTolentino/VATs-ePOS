@@ -9,6 +9,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     List<ProductModel> list = [];
     on<UpdateTemporaryList>((event, emit) {
       double subTotal = 0;
+      double vatableSales = 0;
       double vat = 0.0;
       double total = 0;
       double change = 0;
@@ -36,10 +37,11 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         });
         subTotal += event.serviceCharge;
         vat = subTotal * 0.12;
+        vatableSales = subTotal - vat;
         total = subTotal;
         change = event.cash - total;
         print('CHANGEEEEE $change');
-        emit(ProductUpdated(list, subTotal, total, vat));
+        emit(ProductUpdated(list, subTotal, total, vat, vatableSales));
       } catch (e) {
         print('UpdateTemporaryList error : $e');
         emit(ProductError('Error updating list'));
@@ -48,6 +50,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<UpdateTemporaryListValue>(
       (event, emit) {
         double subTotal = 0;
+        double vatableSales = 0;
         double vat = 0.0;
         double total = 0;
         emit(ProductLoading());
@@ -58,8 +61,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
           });
           subTotal += event.serviceCharge;
           vat = subTotal * 0.12;
+          vatableSales = subTotal - vat;
           total = subTotal;
-          emit(ProductUpdated(list, subTotal, total, vat));
+          emit(ProductUpdated(list, subTotal, total, vat, vatableSales));
         } catch (e) {
           print(e);
           emit(ProductError('Failed to fetch data'));
@@ -69,6 +73,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<GetChange>(
       (event, emit) {
         double subTotal = 0;
+        double vatableSales = 0;
         double vat = 0.0;
         double total = 0;
         double change = 0;
@@ -79,9 +84,10 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
           });
           subTotal += event.serviceCharge;
           vat = subTotal * 0.12;
+          vatableSales = subTotal - vat;
           total = subTotal;
           change = event.cash - total;
-          emit(ProductChange(list, subTotal, change, total, vat));
+          emit(ProductChange(list, subTotal, change, total, vat, vatableSales));
         } catch (e) {
           print(e);
           emit(ProductError('Failed to fetch data'));
@@ -102,6 +108,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<DeleteProduct>(
       (event, emit) {
         double subTotal = 0;
+        double vatableSales = 0;
         double vat = 0.0;
         double total = 0;
         emit(ProductLoading());
@@ -116,9 +123,10 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
             print('subtotal delete: $subTotal');
             print('quantity delete: ${data.quantity}');
             vat = subTotal * 0.12;
+            vatableSales = subTotal - vat;
             total = subTotal + event.serviceCharge;
           });
-          emit(ProductUpdated(list, subTotal, total, vat));
+          emit(ProductUpdated(list, subTotal, total, vat, vatableSales));
         } catch (e) {
           print(e);
           emit(ProductError('Error removing item'));

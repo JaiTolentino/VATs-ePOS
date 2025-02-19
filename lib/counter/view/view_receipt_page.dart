@@ -230,7 +230,7 @@ class _EditProductViewState extends State<ViewReceiptView> {
                                             ),
                                           ),
                                           SizedBox(
-                                            width: 200,
+                                            width: 230,
                                             child: Text(
                                               state.receipt!.address,
                                               textAlign: TextAlign.right,
@@ -386,13 +386,32 @@ class _EditProductViewState extends State<ViewReceiptView> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            'Service Charge',
+                                            'Subtotal',
                                             style: TextStyle(
                                               color: Colors.black,
                                             ),
                                           ),
                                           Text(
-                                            '${NumberFormat("#,##0.00").format(state.receipt!.serviceCharge)} PHP',
+                                            '${NumberFormat("#,##0.00").format(subTotal + state.receipt.serviceCharge)} PHP',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Vatable Sales',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          Text(
+                                            '${NumberFormat("#,##0.00").format(state.receipt.vatableSales)} PHP',
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontWeight: FontWeight.w500,
@@ -424,13 +443,13 @@ class _EditProductViewState extends State<ViewReceiptView> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            'Subtotal',
+                                            'Service Charge',
                                             style: TextStyle(
                                               color: Colors.black,
                                             ),
                                           ),
                                           Text(
-                                            '${NumberFormat("#,##0.00").format(subTotal + state.receipt.serviceCharge)} PHP',
+                                            '${NumberFormat("#,##0.00").format(state.receipt!.serviceCharge)} PHP',
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontWeight: FontWeight.w500,

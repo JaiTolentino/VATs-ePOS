@@ -136,19 +136,18 @@ class _PosViewState extends State<PosView> {
                   },
                 ),
                 SideMenuItem(
-                  icon: Icon(Icons.calculate),
-                  onTap: (index, sideMenuController) {
-                    sideMenuController.changePage(index);
-                    clearCart(context);
-                    context.go('/financialreport');
-                  },
-                ),
-                SideMenuItem(
                   icon: Icon(Icons.attach_money),
                   onTap: (index, sideMenuController) {
                     sideMenuController.changePage(index);
                     clearCart(context);
                     context.go('/expensetracker');
+                  },
+                ),
+                SideMenuItem(
+                  icon: Icon(Icons.add_chart),
+                  onTap: (index, sideMenuController) {
+                    sideMenuController.changePage(index);
+                    context.go('/financialreport');
                   },
                 ),
                 SideMenuItem(
@@ -856,6 +855,34 @@ class _PosViewState extends State<PosView> {
                           ),
                           Divider(),
 
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Sub Total'),
+                              Text('₱ $subtotal'),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Vatable Sales'),
+                              Text('₱ $subtotal'),
+                            ],
+                          ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //   children: [
+                          //     Text('Service Charge'),
+                          //     Text('₱ ${serviceCharge}'),
+                          //   ],
+                          // ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('VAT 12%'),
+                              Text('₱ ${NumberFormat("#,##0.00").format(vat)}'),
+                            ],
+                          ),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10.0),
                             child: Row(
@@ -883,27 +910,6 @@ class _PosViewState extends State<PosView> {
                                 ),
                               ],
                             ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('Sub Total'),
-                              Text('₱ $subtotal'),
-                            ],
-                          ),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //   children: [
-                          //     Text('Service Charge'),
-                          //     Text('₱ ${serviceCharge}'),
-                          //   ],
-                          // ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('VAT 12%'),
-                              Text('₱ ${NumberFormat("#,##0.00").format(vat)}'),
-                            ],
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1027,6 +1033,7 @@ class _PosViewState extends State<PosView> {
                   subtotal = state.subTotal;
                   total = state.total;
                   vat = state.vat;
+                  double vatableSales = state.vatableSales;
                   return Container(
                     width: 350,
                     color: Color.fromRGBO(31, 29, 43, 1),
@@ -1140,6 +1147,36 @@ class _PosViewState extends State<PosView> {
                           ),
                           Divider(),
 
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Sub Total'),
+                              Text(
+                                  '₱ ${NumberFormat("#,##0.00").format(subtotal)}'),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Vatable Sales'),
+                              Text(
+                                  '₱ ${NumberFormat("#,##0.00").format(vatableSales)}'),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('VAT 12%'),
+                              Text('₱ ${NumberFormat("#,##0.00").format(vat)}'),
+                            ],
+                          ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //   children: [
+                          //     Text('Service Charge'),
+                          //     Text('₱ ${serviceCharge}'),
+                          //   ],
+                          // ),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10.0),
                             child: Row(
@@ -1177,29 +1214,6 @@ class _PosViewState extends State<PosView> {
                               ],
                             ),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('VAT 12%'),
-                              Text('₱ ${NumberFormat("#,##0.00").format(vat)}'),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('Sub Total'),
-                              Text(
-                                  '₱ ${NumberFormat("#,##0.00").format(subtotal)}'),
-                            ],
-                          ),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //   children: [
-                          //     Text('Service Charge'),
-                          //     Text('₱ ${serviceCharge}'),
-                          //   ],
-                          // ),
-
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -1314,6 +1328,7 @@ class _PosViewState extends State<PosView> {
                                             serviceCharge,
                                             subtotal,
                                             vat,
+                                            vatableSales,
                                             total,
                                             cash,
                                             change,
@@ -1352,6 +1367,7 @@ class _PosViewState extends State<PosView> {
                     ),
                   );
                 } else if (state is ProductChange) {
+                  double vatableSales = state.vatableSales;
                   change = state.change;
                   subtotal = state.subTotal;
                   total = state.total;
@@ -1469,6 +1485,36 @@ class _PosViewState extends State<PosView> {
                           ),
                           Divider(),
 
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Sub Total'),
+                              Text(
+                                  '₱ ${NumberFormat("#,##0.00").format(subtotal)}'),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Vatable Sales'),
+                              Text(
+                                  '₱ ${NumberFormat("#,##0.00").format(vatableSales)}'),
+                            ],
+                          ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //   children: [
+                          //     Text('Service Charge'),
+                          //     Text('₱ ${serviceCharge}'),
+                          //   ],
+                          // ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('VAT 12%'),
+                              Text('₱ ${NumberFormat("#,##0.00").format(vat)}'),
+                            ],
+                          ),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10.0),
                             child: Row(
@@ -1505,27 +1551,6 @@ class _PosViewState extends State<PosView> {
                                 ),
                               ],
                             ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('Sub Total'),
-                              Text('₱ ${subtotal.toStringAsFixed(2)}'),
-                            ],
-                          ),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //   children: [
-                          //     Text('Service Charge'),
-                          //     Text('₱ ${serviceCharge}'),
-                          //   ],
-                          // ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('VAT 12%'),
-                              Text('₱ ${NumberFormat("#,##0.00").format(vat)}'),
-                            ],
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1651,6 +1676,7 @@ class _PosViewState extends State<PosView> {
                                             serviceCharge,
                                             subtotal,
                                             vat,
+                                            vatableSales,
                                             total,
                                             cash,
                                             change,
