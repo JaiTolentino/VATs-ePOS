@@ -990,7 +990,7 @@ class _FinancialReportViewState extends State<FinancialReportView> {
                   },
                 ),
                 SideMenuItem(
-                  icon: Icon(Icons.attach_money),
+                  icon: Icon(Icons.calculate),
                   onTap: (index, sideMenuController) {
                     sideMenuController.changePage(index);
                     context.go('/expensetracker');

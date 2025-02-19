@@ -207,7 +207,7 @@ class _InventoryViewState extends State<InventoryView> {
                   },
                 ),
                 SideMenuItem(
-                  icon: Icon(Icons.attach_money),
+                  icon: Icon(Icons.calculate),
                   onTap: (index, sideMenuController) {
                     sideMenuController.changePage(index);
                     context.go('/expensetracker');

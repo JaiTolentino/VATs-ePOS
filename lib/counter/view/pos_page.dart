@@ -136,7 +136,7 @@ class _PosViewState extends State<PosView> {
                   },
                 ),
                 SideMenuItem(
-                  icon: Icon(Icons.attach_money),
+                  icon: Icon(Icons.calculate),
                   onTap: (index, sideMenuController) {
                     sideMenuController.changePage(index);
                     clearCart(context);
