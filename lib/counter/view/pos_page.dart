@@ -147,6 +147,7 @@ class _PosViewState extends State<PosView> {
                   icon: Icon(Icons.add_chart),
                   onTap: (index, sideMenuController) {
                     sideMenuController.changePage(index);
+                    clearCart(context);
                     context.go('/financialreport');
                   },
                 ),
