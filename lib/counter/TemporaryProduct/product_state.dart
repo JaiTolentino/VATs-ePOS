@@ -21,7 +21,9 @@ class ProductUpdated extends ProductState {
   final double subTotal;
   final double vat;
   final double total;
-  ProductUpdated(this.products, this.subTotal, this.total, this.vat);
+  final double vatableSales;
+  ProductUpdated(
+      this.products, this.subTotal, this.total, this.vat, this.vatableSales);
 }
 
 class ProductChange extends ProductState {
@@ -29,7 +31,8 @@ class ProductChange extends ProductState {
   final double subTotal;
   final double vat;
   final double total;
+  final double vatableSales;
   final double change;
-  ProductChange(
-      this.products, this.subTotal, this.change, this.total, this.vat);
+  ProductChange(this.products, this.subTotal, this.change, this.total, this.vat,
+      this.vatableSales);
 }

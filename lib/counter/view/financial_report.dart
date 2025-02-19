@@ -990,17 +990,17 @@ class _FinancialReportViewState extends State<FinancialReportView> {
                   },
                 ),
                 SideMenuItem(
-                  icon: Icon(Icons.calculate),
-                  onTap: (index, sideMenuController) {
-                    sideMenuController.changePage(index);
-                    context.go('/financialreport');
-                  },
-                ),
-                SideMenuItem(
                   icon: Icon(Icons.attach_money),
                   onTap: (index, sideMenuController) {
                     sideMenuController.changePage(index);
                     context.go('/expensetracker');
+                  },
+                ),
+                SideMenuItem(
+                  icon: Icon(Icons.add_chart),
+                  onTap: (index, sideMenuController) {
+                    sideMenuController.changePage(index);
+                    context.go('/financialreport');
                   },
                 ),
                 SideMenuItem(
@@ -1011,7 +1011,7 @@ class _FinancialReportViewState extends State<FinancialReportView> {
                   },
                 ),
               ],
-              controller: SideMenuController(initialPage: 3),
+              controller: SideMenuController(initialPage: 4),
             ),
             Container(
               width: MediaQuery.of(context).size.width - 70,

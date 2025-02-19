@@ -111,17 +111,17 @@ class _ExpensesViewState extends State<ExpensesView> {
                   },
                 ),
                 SideMenuItem(
-                  icon: Icon(Icons.calculate),
-                  onTap: (index, sideMenuController) {
-                    sideMenuController.changePage(index);
-                    context.go('/financialreport');
-                  },
-                ),
-                SideMenuItem(
                   icon: Icon(Icons.attach_money),
                   onTap: (index, sideMenuController) {
                     sideMenuController.changePage(index);
                     context.go('/expensetracker');
+                  },
+                ),
+                SideMenuItem(
+                  icon: Icon(Icons.add_chart),
+                  onTap: (index, sideMenuController) {
+                    sideMenuController.changePage(index);
+                    context.go('/financialreport');
                   },
                 ),
                 SideMenuItem(

@@ -136,7 +136,7 @@ class _InventoryViewState extends State<InventoryView> {
   ];
   @override
   Widget build(BuildContext context) {
-    SideMenuController sideMenuController = SideMenuController(initialPage: 4);
+    SideMenuController sideMenuController = SideMenuController(initialPage: 3);
     String query = '';
 
     List<ProductModel> search(String query, List<ProductModel> list) {
@@ -207,17 +207,17 @@ class _InventoryViewState extends State<InventoryView> {
                   },
                 ),
                 SideMenuItem(
-                  icon: Icon(Icons.calculate),
-                  onTap: (index, sideMenuController) {
-                    sideMenuController.changePage(index);
-                    context.go('/financialreport');
-                  },
-                ),
-                SideMenuItem(
                   icon: Icon(Icons.attach_money),
                   onTap: (index, sideMenuController) {
                     sideMenuController.changePage(index);
                     context.go('/expensetracker');
+                  },
+                ),
+                SideMenuItem(
+                  icon: Icon(Icons.add_chart),
+                  onTap: (index, sideMenuController) {
+                    sideMenuController.changePage(index);
+                    context.go('/financialreport');
                   },
                 ),
                 SideMenuItem(
